@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Simple Budget Tracker',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -20,8 +20,13 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
+        brightness: Brightness.light,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      home: DefaultTabController(
+         length: 3,
+         child: const MyHomePage(),
+      ),
     );
   }
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'save_tab/export.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class SearchUnsplash extends StatefulWidget {
+  const SearchUnsplash({Key? key, required this.searchTerm}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -13,13 +12,14 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
+  final String searchTerm;
+
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<SearchUnsplash> createState() => _SearchUnsplash();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  
+class _SearchUnsplash extends State<SearchUnsplash> {
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +31,30 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-         bottom: const TabBar(
-            tabs: [
-               Tab(text: "Save"),
-               Tab(text: "Earn"),
-               Tab(text: "Learn"),
-            ],
-         ),
+        title: const Text("Search Unsplash"),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.close,
+            ),
+            iconSize: 24.0,
+            color: Colors.grey,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
-      body: TabBarView(
-         children: [
-          SaveTab(),
-          Text("Earn Tab"),
-          Text("Learn Tab"),
-         ]
-      )
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text("${widget.searchTerm}"),
+          Text("Place Holder for image grid view"),
+        ],
+      ),
     );
   }
 }
+
