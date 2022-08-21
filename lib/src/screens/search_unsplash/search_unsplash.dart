@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import "../../models/export.dart";
+import "../../services/export.dart";
 
 class SearchUnsplash extends StatefulWidget {
   const SearchUnsplash({Key? key, required this.searchTerm}) : super(key: key);
@@ -14,12 +16,15 @@ class SearchUnsplash extends StatefulWidget {
 
   final String searchTerm;
 
-
   @override
   State<SearchUnsplash> createState() => _SearchUnsplash();
 }
 
 class _SearchUnsplash extends State<SearchUnsplash> {
+
+  late List<ImageModel> images;
+
+  final UnsplashService unsplashService = UnsplashService();
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +51,60 @@ class _SearchUnsplash extends State<SearchUnsplash> {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text("${widget.searchTerm}"),
-          Text("Place Holder for image grid view"),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text("${widget.searchTerm}"),
+            Center(
+              child: FutureBuilder(
+                future: unsplashService.getPhotos(),
+                builder: (context, snapshot){
+                    if (snapshot.hasData && snapshot.cohnnectionState == ConnectionState.done){
+                      if (snapshot.data.runTimeType != String){
+                          images = <ImageModel>[];
+                          images = snapshot.data as List<ImageModel>;
+                          return GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 200,
+                              childAspectRatio: 3/2,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20,
+                            ),
+                            itemCount: images.length,
+                            itemBuilder: (BuildContext context, index){
+                              return GestureDetector(
+                                  onTap: (){
+                                    print(images[index].imageUrl);
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      image: DecorationImage(
+                                        image: NetworkImage(images[index].imageUrl),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  ),
+                              );
+                            }
+                          );
+                        } else {
+                            return const Center(child: Text("Could not fetch images"));
+                          }
+                      } else {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                  }
+              )
+            )
+
+          ],
+        ),
       ),
     );
   }

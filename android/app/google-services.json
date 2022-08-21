@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "68834890530",
+    "project_id": "goal-tracker-97e67",
+    "storage_bucket": "goal-tracker-97e67.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68834890530:android:02ccaa01578fa147938b7b",
+        "android_client_info": {
+          "package_name": "com.example.flutter_goal_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "68834890530-edqb46hriqnadqvo5a9ghnvlplf6271e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUcZMQb-9r7RiIscPQbL1IAV0tckqeqIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "68834890530-edqb46hriqnadqvo5a9ghnvlplf6271e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

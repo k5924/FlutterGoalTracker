@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import "../export.dart";
+import "../../models/export.dart";
 
 class CreateGoal extends StatefulWidget {
   const CreateGoal({Key? key}) : super(key: key);
@@ -27,6 +28,7 @@ class _CreateGoal extends State<CreateGoal> {
       goalController.dispose();
       super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +88,9 @@ class _CreateGoal extends State<CreateGoal> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context){
-                              return SearchUnsplash(searchTerm: goalController.text);
+                              return SearchUnsplash(
+                                searchTerm: goalController.text,
+                              );
                             }),
                           );
                       }
