@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import "../export.dart";
-import "../../models/export.dart";
 
 class CreateGoal extends StatefulWidget {
   const CreateGoal({Key? key}) : super(key: key);
@@ -21,11 +20,15 @@ class CreateGoal extends StatefulWidget {
 
 class _CreateGoal extends State<CreateGoal> {
   final TextEditingController goalController = TextEditingController();
+  final TextEditingController amountController = TextEditingController();
+  final TextEditingController durationController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose(){
       goalController.dispose();
+      amountController.dispose();
+      durationController.dispose();
       super.dispose();
   }
 
@@ -69,7 +72,7 @@ class _CreateGoal extends State<CreateGoal> {
                   controller: goalController,
                   validator: (value){
                     if (value == null || value.isEmpty){
-                        return "Please enter some text";
+                        return "Please enter a name for your goal";
                     }
                     return null;
                   },
@@ -77,10 +80,46 @@ class _CreateGoal extends State<CreateGoal> {
                     goalController.text = goalName!;
                   },
                   decoration: const InputDecoration(
-                    hintText: "Goal Name",
+                    hintText: "What are you saving towards?",
                   ),
                 ),
-                Text("Image will display here"),
+                TextFormField(
+                  controller: amountController,
+                  validator: (value){
+                    if (value == null || value.isEmpty){
+                        return "Please enter an amount";
+                    } 
+                    if (!RegExp(r'^[0-9]\d*(\.\d+)?$').hasMatch(value!)){
+                        return "Enter a valid amount";
+                    }
+                    return null;
+                  },
+                  onSaved: (amount) {
+                    amountController.text = amount!;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: "How much do you want to save?",
+                  ),
+                ),
+                TextFormField(
+                  controller: durationController,
+                  validator: (value){
+                    if (value == null || value.isEmpty){
+                        return "Please enter an amount of months";
+                    }
+                    if (!RegExp(r'^[0-9]\d*(\.\d+)?$').hasMatch(value!)){
+                        return "Enter a valid duration";
+                    }
+                    return null;
+                  },
+                  onSaved: (duration) {
+                    duration.text = duration!;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: "How many months are you saving for?",
+                  ),
+                ),
+
                 ElevatedButton(
                   onPressed: () async {
                       if (_formKey.currentState!.validate()){
@@ -90,6 +129,8 @@ class _CreateGoal extends State<CreateGoal> {
                             MaterialPageRoute(builder: (context){
                               return SearchUnsplash(
                                 searchTerm: goalController.text,
+                                amount: amountController.text,
+                                duration: durationController.text,
                               );
                             }),
                           );

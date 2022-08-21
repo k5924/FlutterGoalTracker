@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import "../../models/export.dart";
 import "../../services/export.dart";
+import "../export.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
 
 class SearchUnsplash extends StatefulWidget {
-  const SearchUnsplash({Key? key, required this.searchTerm}) : super(key: key);
+  const SearchUnsplash({Key? key,
+    required this.searchTerm,
+    required this.amount,
+    required this.duration,
+    }) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -15,6 +21,8 @@ class SearchUnsplash extends StatefulWidget {
   // always marked "final".
 
   final String searchTerm;
+  final Stirng amount;
+  final String duration;
 
   @override
   State<SearchUnsplash> createState() => _SearchUnsplash();
@@ -25,6 +33,22 @@ class _SearchUnsplash extends State<SearchUnsplash> {
   late List<ImageModel> images;
 
   final UnsplashService unsplashService = UnsplashService();
+
+  final DatabaseService databaseService = DatabaseService(db: FirebaseFirestore.instance);
+
+  Future<void> newGoal(String imageUrl) async {
+      try{
+          final GoalModel goalModel = GoalModel(
+            name: widget.searchTerm,
+            amount: widget.amount,
+            duration: widget.duration,
+            imageUrl: imageUrl,
+          );
+          await databaseService.newGoal(goalModel);
+        } catch (exception) {
+            print(excepton);
+          }
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +83,7 @@ class _SearchUnsplash extends State<SearchUnsplash> {
             Text("${widget.searchTerm}"),
             Center(
               child: FutureBuilder(
-                future: unsplashService.getPhotos(),
+                future: unsplashService.getPhotos(widget.searchTerm),
                 builder: (context, snapshot){
                     if (snapshot.hasData && snapshot.cohnnectionState == ConnectionState.done){
                       if (snapshot.data.runTimeType != String){
@@ -77,8 +101,14 @@ class _SearchUnsplash extends State<SearchUnsplash> {
                             itemCount: images.length,
                             itemBuilder: (BuildContext context, index){
                               return GestureDetector(
-                                  onTap: (){
-                                    print(images[index].imageUrl);
+                                  onTap: () async {
+                                    await newGoal(images[index].imageUrl);
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) => MyHomePage()
+                                      )
+                                    );
                                   },
                                   child: Container(
                                     alignment: Alignment.center,
