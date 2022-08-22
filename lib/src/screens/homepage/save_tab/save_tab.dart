@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import "../../export.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
+import "../../../models/export.dart";
 
 class SaveTab extends StatefulWidget {
   const SaveTab({Key? key}) : super(key: key);
@@ -21,9 +23,13 @@ class SaveTab extends StatefulWidget {
 class _SaveTab extends State<SaveTab> {
   int balance = 0;
 
+  List<GoalModel> goals = [];
+
+  final DatabaseService databaseService = DatabaseService(db: FirebaseFirestore.instance);
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
+    // This method is rerun every time setState is called, for instance as done 
     // by the _incrementCounter method above.
     //
     // The Flutter framework has been optimized to make rerunning build methods
@@ -43,7 +49,7 @@ class _SaveTab extends State<SaveTab> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CreateGoal(),
+                        builder: (context) => const CreateGoal(oldGoalModel: null),
                       ),
                     );
                 },
@@ -55,7 +61,69 @@ class _SaveTab extends State<SaveTab> {
               ),
             ],
           ),
-          Text("Goals go here"),
+          StreamBuilder<QuerySnapshot>(
+            stream: databaseService.getGoals(),
+            builder: (context, snapshot){
+                if (!snapshot.hasData){
+                    if (snapshot.connectionState != ConnectionState.done){
+                        return const Center(
+                          child: CircularProgressIndicator()
+                        );
+                      } else {
+                          return const Center(
+                            child: Text("Couldnt load goals")
+                          );
+                        }
+                  } else {
+                      final goalsDB = snapshot.data!.docs;
+                      goals = <GoalModel>[];
+                      for (final item in goalsDB){
+                          final goal = GoalModel(
+                            name: item["name"] as String,
+                            amount: item["amount"] as String,
+                            duration: item["duration"] as String,
+                            imageUrl: item["imageUrl"] as String,
+                          );
+                          goals.add(goal);
+                          setState(() {
+                            balance += int.parse(goal.amount) / int.parse(goal.duration);
+                            }
+                          );
+                        }
+                        return Expanded(
+                          child: ListView.builder(
+                            scrollDirection: Axis.verticle,
+                            shrinkWrap: true,
+                            itemCount: goals.length,
+                            itemBuilder: (context, index){
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) => ViewGoal(goal: goals[index])
+                                      )
+                                    );
+
+                                  }
+                                  child: Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        image: DecorationImage(
+                                          image: NetworkImage(goals[index].imageUrl),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                      child: Text("${goals[index].name} £ ${goals[index].amount} over ${goals[index].duration} months"),
+                                    ),
+                                );
+                              }
+                          )
+                        );
+                    }
+              }
+          ),
           Text("Transactions go here"),
         ],
       ),

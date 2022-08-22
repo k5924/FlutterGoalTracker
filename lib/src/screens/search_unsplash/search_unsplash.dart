@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "../../models/export.dart";
 import "../../services/export.dart";
+import "../../models/export.dart";
 import "../export.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 
@@ -9,6 +10,7 @@ class SearchUnsplash extends StatefulWidget {
     required this.searchTerm,
     required this.amount,
     required this.duration,
+    required this.oldGoalModel,
     }) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -23,6 +25,7 @@ class SearchUnsplash extends StatefulWidget {
   final String searchTerm;
   final Stirng amount;
   final String duration;
+  final GoalModel oldGoalModel;
 
   @override
   State<SearchUnsplash> createState() => _SearchUnsplash();
@@ -44,10 +47,14 @@ class _SearchUnsplash extends State<SearchUnsplash> {
             duration: widget.duration,
             imageUrl: imageUrl,
           );
-          await databaseService.newGoal(goalModel);
-        } catch (exception) {
-            print(excepton);
+          if (widget.oldGoalModel != null){
+            await databaseService.updateGoal(oldGoalModel: widget.oldGoalModel, newGoalModel: goalModel);
+          } else {
+            await databaseService.newGoal(goalModel);
           }
+      } catch (exception) {
+            print(excepton);
+      }
     }
 
   @override
