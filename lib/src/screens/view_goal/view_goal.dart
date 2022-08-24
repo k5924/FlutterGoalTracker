@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import "../export.dart";
 import "../../models/export.dart";
+import "../../services/export.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
 
 class ViewGoal extends StatefulWidget {
   const ViewGoal({Key? key, required this.goal}) : super(key: key);
@@ -62,10 +64,10 @@ class _ViewGoal extends State<ViewGoal> {
               Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CreateGoal(oldGoalModel: widget.goal),
+                        builder: (context) => CreateGoal(oldGoalModel: widget.goal),
                       ),
                     );
-            }
+            },
             icon: const Icon(Icons.edit_outlined),
             label: const Text("Update goal"),
           ),
@@ -73,7 +75,7 @@ class _ViewGoal extends State<ViewGoal> {
             onPressed: () async {
               await databaseService.deleteGoal(goalModel: widget.goal);
               Navigator.pop(context);
-            }
+            },
             icon: const Icon(Icons.delete_forever),
             label: const Text("Delete goal"),
           )

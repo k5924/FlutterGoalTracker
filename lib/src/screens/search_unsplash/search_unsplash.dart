@@ -23,7 +23,7 @@ class SearchUnsplash extends StatefulWidget {
   // always marked "final".
 
   final String searchTerm;
-  final Stirng amount;
+  final String amount;
   final String duration;
   final GoalModel oldGoalModel;
 
@@ -47,13 +47,13 @@ class _SearchUnsplash extends State<SearchUnsplash> {
             duration: widget.duration,
             imageUrl: imageUrl,
           );
-          if (widget.oldGoalModel != null){
+          if (widget.oldGoalModel.name == ""){
             await databaseService.updateGoal(oldGoalModel: widget.oldGoalModel, newGoalModel: goalModel);
           } else {
-            await databaseService.newGoal(goalModel);
+            await databaseService.newGoal(goalModel: goalModel);
           }
       } catch (exception) {
-            print(excepton);
+            print(exception);
       }
     }
 
@@ -92,8 +92,8 @@ class _SearchUnsplash extends State<SearchUnsplash> {
               child: FutureBuilder(
                 future: unsplashService.getPhotos(widget.searchTerm),
                 builder: (context, snapshot){
-                    if (snapshot.hasData && snapshot.cohnnectionState == ConnectionState.done){
-                      if (snapshot.data.runTimeType != String){
+                    if (snapshot.hasData && snapshot.connectionState == ConnectionState.done){
+                      if (snapshot.data.runtimeType != String){
                           images = <ImageModel>[];
                           images = snapshot.data as List<ImageModel>;
                           return GridView.builder(

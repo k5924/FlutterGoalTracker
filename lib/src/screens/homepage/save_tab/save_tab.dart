@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "../../export.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "../../../models/export.dart";
+import "../../../services/export.dart";
 
 class SaveTab extends StatefulWidget {
   const SaveTab({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class SaveTab extends StatefulWidget {
 }
 
 class _SaveTab extends State<SaveTab> {
-  int balance = 0;
+  double balance = 0.0;
 
   List<GoalModel> goals = [];
 
@@ -49,7 +50,12 @@ class _SaveTab extends State<SaveTab> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CreateGoal(oldGoalModel: null),
+                        builder: (context) => CreateGoal(oldGoalModel: GoalModel(
+                          name: "",
+                          amount: "",
+                          duration: "",
+                          imageUrl: "",
+                        )),
                       ),
                     );
                 },
@@ -86,13 +92,13 @@ class _SaveTab extends State<SaveTab> {
                           );
                           goals.add(goal);
                           setState(() {
-                            balance += int.parse(goal.amount) / int.parse(goal.duration);
+                            balance += double.parse(goal.amount) / double.parse(goal.duration);
                             }
                           );
                         }
                         return Expanded(
                           child: ListView.builder(
-                            scrollDirection: Axis.verticle,
+                            scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             itemCount: goals.length,
                             itemBuilder: (context, index){
@@ -105,7 +111,7 @@ class _SaveTab extends State<SaveTab> {
                                       )
                                     );
 
-                                  }
+                                  },
                                   child: Container(
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(

@@ -36,7 +36,7 @@ class UnsplashService {
         return "error";
     } else {
       photoList["results"].forEach((element) {
-          if element["urls"]["raw"] != null {
+          if (element["urls"]["raw"] != null) {
               final ImageModel imageModel = ImageModel(imageUrl: element["urls"]["raw"] as String);
               images.add(imageModel);
             }

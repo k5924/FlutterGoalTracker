@@ -11,7 +11,7 @@ class RemoteConfigService{
           await remoteConfig.setConfigSettings(
             RemoteConfigSettings(
               fetchTimeout: const Duration(seconds: 10),
-              minimumFetchInterval: Duration.zerom
+              minimumFetchInterval: Duration.zero
             ),
           );
           await remoteConfig.fetchAndActivate();
@@ -28,7 +28,7 @@ class RemoteConfigService{
     Future<List<String>> getKeys() async {
         final remoteConfig = await _initialise();
         final accessKey = remoteConfig!.getString('access_key');
-        final secretKey = remoteConfig!.getString('secret_key');
+        final secretKey = remoteConfig.getString('secret_key');
         return [accessKey, secretKey];
     }
 }

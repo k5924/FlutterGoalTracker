@@ -12,7 +12,7 @@ class DatabaseService{
     await goalsCollection.add(goalModel.toMap());
     }
 
-  Stream<QuerySnapshot> getGoals() async {
+  Stream<QuerySnapshot> getGoals() {
       return goalsCollection.snapshots();
     }
 

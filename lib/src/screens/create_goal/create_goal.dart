@@ -92,7 +92,7 @@ class _CreateGoal extends State<CreateGoal> {
                     if (value == null || value.isEmpty){
                         return "Please enter an amount";
                     } 
-                    if (!RegExp(r'^[0-9]\d*(\.\d+)?$').hasMatch(value!)){
+                    if (!RegExp(r'^[0-9]\d*(\.\d+)?$').hasMatch(value)){
                         return "Enter a valid amount";
                     }
                     return null;
@@ -110,13 +110,13 @@ class _CreateGoal extends State<CreateGoal> {
                     if (value == null || value.isEmpty){
                         return "Please enter an amount of months";
                     }
-                    if (!RegExp(r'^[0-9]\d*(\.\d+)?$').hasMatch(value!)){
+                    if (!RegExp(r'^[0-9]\d*(\.\d+)?$').hasMatch(value)){
                         return "Enter a valid duration";
                     }
                     return null;
                   },
                   onSaved: (duration) {
-                    duration.text = duration!;
+                    durationController.text = duration!;
                   },
                   decoration: const InputDecoration(
                     hintText: "How many months are you saving for?",
