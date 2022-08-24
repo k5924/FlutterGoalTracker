@@ -47,7 +47,7 @@ class _SearchUnsplash extends State<SearchUnsplash> {
             duration: widget.duration,
             imageUrl: imageUrl,
           );
-          if (widget.oldGoalModel.name == ""){
+          if (widget.oldGoalModel.name != ""){
             await databaseService.updateGoal(oldGoalModel: widget.oldGoalModel, newGoalModel: goalModel);
           } else {
             await databaseService.newGoal(goalModel: goalModel);
