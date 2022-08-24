@@ -25,11 +25,10 @@ class UnsplashService {
       url: url,
       endpoint: "/search/photos",
       parameters: {
+          'client_id': keysList[0],
           'query': searchTerm,
       },
-      headers: {
-        'client_id': keysList[0],
-      },
+      headers: null,
     );
     final photoList = await networkService.getData();
     if (photoList.runTimeType == int){
